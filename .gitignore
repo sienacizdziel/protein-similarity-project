@@ -1,2 +1,8 @@
 venv/
 app/__pycache__/
+.env
+*.pyc
+.pytest_cache/
+data/
+.dvc/cache/
+.dvc/tmp/

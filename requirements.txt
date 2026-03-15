@@ -2,3 +2,7 @@ requests
 fastapi
 uvicorn
 fastapi[standard]
+dvc
+transformers
+torch
+wandb

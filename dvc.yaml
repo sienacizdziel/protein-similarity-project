@@ -1,0 +1,7 @@
+stages:
+  fetch:
+    cmd: python app/uniprot.py
+    deps:
+      - app/uniprot.py
+    outs:
+      - data/raw/sequences.json

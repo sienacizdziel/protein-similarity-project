@@ -3,12 +3,14 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
 import numpy as np
+import wandb
 
 # download model weights from huggingface
-model_name = "facebook/esm2_t12_35M_UR50D"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
-model.eval()
+def load_model():
+    model_name = "facebook/esm2_t12_35M_UR50D"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModel.from_pretrained(model_name)
+    model.eval()
 
 def embed_sequence(sequence):
     # tokenize — converts amino acid string to token IDs
@@ -22,8 +24,10 @@ def embed_sequence(sequence):
     embedding = outputs.last_hidden_state[0, 1:-1, :].mean(dim=0)
     return embedding.numpy()
 
-# Use it
-sequence = "MAEPRQEFEVMEDHAGTYGLGDRK"  # Tau fragment
-embedding = embed_sequence(sequence)
-print(embedding.shape)  # (480,) for esm2_t12
+if __name__ == "__main__":
+    load_model()
+    # Use it
+    sequence = "MAEPRQEFEVMEDHAGTYGLGDRK"  # Tau fragment
+    embedding = embed_sequence(sequence)
+    print(embedding.shape)  # (480,) for esm2_t12
 
