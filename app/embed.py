@@ -11,8 +11,9 @@ def load_model():
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name)
     model.eval()
+    return tokenizer, model
 
-def embed_sequence(sequence):
+def embed_sequence(sequence, tokenizer, model):
     # tokenize — converts amino acid string to token IDs
     inputs = tokenizer(sequence, return_tensors="pt")
     
@@ -25,9 +26,9 @@ def embed_sequence(sequence):
     return embedding.numpy()
 
 if __name__ == "__main__":
-    load_model()
+    tokenizer, model = load_model()
     sequence = "MAEPRQEFEVMEDHAGTYGLGDRK"  # Tau fragment
-    embedding = embed_sequence(sequence)
+    embedding = embed_sequence(sequence, tokenizer, model)
     print(embedding.shape)  # (480,) for esm2_t12
     embeddings_path = "models/embeddings.npy"
     np.save(embeddings_path, embedding)

@@ -9,10 +9,11 @@ logger = logging.getLogger(__name__)
 def build_index(embeddings: np.ndarray):
     # builds a FAISS index from embedding vectors
     # uses cosine similarity (normalize, then inner product)
-    norms = np.linalg.norm(embeddings, keepdims=True)
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
     normalized = embeddings / (norms + 1e-8)
     dim = normalized.shape[1]
     index = faiss.IndexFlatIP(dim)
+    return index, normalized
 
 def search(faiss_index, query_embedding, top_k=5):
     # searches the index for the top k nearest results for the query
@@ -26,5 +27,13 @@ def search(faiss_index, query_embedding, top_k=5):
     return distances[0], indices[0]
 
 if __name__ == "__main__":
-    embeddings = np.load()
-    build_index(embeddings)
+    embeddings = np.load("models/embeddings.npy")
+    index, normalized_embeddings = build_index(embeddings)
+    index_path = "models/protein.index"
+    faiss.write_index(index, index_path)
+
+    # save normalized embeddings (for drift detection)
+    normalized_embeddings_path = "models/embeddings_normalized.py"
+    np.save(normalized_embeddings_path, normalized_embeddings)
+
+    distances, indices = search(index, embeddings[0], top_k=5)

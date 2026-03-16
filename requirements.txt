@@ -6,3 +6,4 @@ dvc
 transformers
 torch
 wandb
+faiss-cpu
