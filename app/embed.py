@@ -26,8 +26,9 @@ def embed_sequence(sequence):
 
 if __name__ == "__main__":
     load_model()
-    # Use it
     sequence = "MAEPRQEFEVMEDHAGTYGLGDRK"  # Tau fragment
     embedding = embed_sequence(sequence)
     print(embedding.shape)  # (480,) for esm2_t12
+    embeddings_path = "models/embeddings.npy"
+    np.save(embeddings_path, embedding)
 
